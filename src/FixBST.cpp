@@ -32,6 +32,40 @@ struct node{
 	struct node *right;
 };
 
+void fix(struct node *root, struct node**one, struct node **two)
+{
+	if (root->left != NULL)
+	{
+		if (!(root->data >= root->left->data))
+		{
+			if (*one == NULL)
+				*one = root;
+			else
+				*two = root;
+		}
+	}
+	if (root->right != NULL)
+	{
+		if (!(root->data <= root->right->data))
+		{
+			if (*one == NULL)
+				*one = root;
+			else
+				*two = root;
+		}
+	}
+	if (root == NULL)
+		return;
+	fix(root->left, one, two);
+	fix(root->right, one, two);
+}
 void fix_bst(struct node *root){
-
+	int temp = 0;
+	if (root == NULL)
+		return;
+	struct node* one = NULL, *two = NULL;
+	fix(root, &one, &two);
+	temp = one->data;
+	one->data = two->data;
+	two->data = temp;
 }

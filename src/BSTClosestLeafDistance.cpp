@@ -39,7 +39,49 @@ struct node{
   struct node *right;
 };
 
+int count_path(struct node* root,struct node*temp,int* found,int *ex,int *h)
+{
+	if (root == NULL)
+		return -1;
+	if (root->left == NULL && root->right == NULL)
+		return 0;
+	int left = count_path(root->left,temp,found,ex,h);
+	int right = count_path(root->right,temp,found,ex,h);
+	if (root == temp)
+	{
+		*found = 1;
+	}
+	if (*found == 1)
+	{
+		int min = 0;
+		if (left == -1)
+			min= right + 1;
+		else if (right == -1)
+			min= left + 1;
+		else if (left < right)
+			min= left + 1;
+		else
+			min= right + 1;
+		if (min + *h < *ex)
+			*ex = min + *h;
+		*h += 1;
+	}
+	if (left == -1)
+		return right+1;
+	if (right == -1)
+		return left + 1;
+	if (left < right)
+		return left + 1;
+	return right + 1;
+}
+
 int get_closest_leaf_distance(struct node *root, struct node *temp)
 {
-  return -1;
+	if (root == NULL || temp == NULL)
+		return -1;
+	int found = 0;
+	int extra = 99999;
+	int h = 0;
+	count_path(root, temp, &found,&extra,&h);
+	return extra;
 }

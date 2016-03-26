@@ -29,9 +29,40 @@ struct node{
 	struct node *right;
 };
 
-
+void left_to_right(struct node *root, struct node **node_arr, int *mem)
+{
+	int i = 0;
+	int k = 0;
+	node_arr[i] = root;
+	while (node_arr[i] != NULL)
+	{
+		
+		mem[i] = node_arr[i]->data;
+		if (node_arr[i]->right)
+		{
+			node_arr[k+1] = node_arr[i]->right;
+			k++;
+		}
+		if (node_arr[i]->left)
+		{
+			node_arr[k+1] = node_arr[i]->left;
+			k++;
+		}
+		i++;
+	}
+}
 
 int* BSTRighttoLeftRows(struct node* root)
 {
-    return NULL;
+	if (root==NULL)
+		return NULL;
+	struct node **node_arr = (struct node **)malloc(sizeof(struct node *) * 20);
+	int *mem = (int *)malloc(sizeof(int) * 20);
+	for (int i = 0; i < 20; i++)
+	{
+		node_arr[i] = NULL;
+		mem[i] = 0;
+	}
+	left_to_right(root, node_arr, mem);
+	return mem;
 }
